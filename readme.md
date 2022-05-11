@@ -1,4 +1,4 @@
-# EventHub Intern MVP
+# EventHub Development Job Interview
 
 Here we have a simple ToDo app, but a few things are broken or not quite right. Feel free to pick and choose which problems to complete or solve all of them if you can. This shouldn't take longer than 3 hours. If it does, just turn in what you have at the 3 hour mark.
 
