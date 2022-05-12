@@ -5,7 +5,7 @@
 var app = app || {};
 
 (function () {
-	'use strict';
+	"use strict";
 
 	var Utils = app.Utils;
 	// Generic "model" object. You can use whatever
@@ -25,14 +25,16 @@ var app = app || {};
 
 	app.TodoModel.prototype.inform = function () {
 		Utils.store(this.key, this.todos);
-		this.onChanges.forEach(function (cb) { cb(); });
+		this.onChanges.forEach(function (cb) {
+			cb();
+		});
 	};
 
 	app.TodoModel.prototype.addTodo = function (title) {
 		this.todos = this.todos.concat({
 			id: Utils.uuid(),
 			title: title,
-			completed: false
+			completed: false,
 		});
 
 		this.inform();
@@ -44,7 +46,7 @@ var app = app || {};
 		// we use map() and filter() everywhere instead of mutating the array or
 		// todo items themselves.
 		this.todos = this.todos.map(function (todo) {
-			return Utils.extend({}, todo, {completed: checked});
+			return Utils.extend({}, todo, { completed: checked });
 		});
 
 		this.inform();
@@ -52,9 +54,7 @@ var app = app || {};
 
 	app.TodoModel.prototype.toggle = function (todoToToggle) {
 		this.todos = this.todos.map(function (todo) {
-			return todo !== todoToToggle ?
-				todo :
-				Utils.extend({}, todo, {completed: !todo.completed});
+			return todo !== todoToToggle ? todo : Utils.extend({}, todo, { completed: !todo.completed });
 		});
 
 		this.inform();
@@ -70,7 +70,7 @@ var app = app || {};
 
 	app.TodoModel.prototype.save = function (todoToSave, text) {
 		this.todos = this.todos.map(function (todo) {
-			return todo !== todoToSave ? todo : Utils.extend({}, todo, {title: text});
+			return todo !== todoToSave ? todo : Utils.extend({}, todo, { title: text });
 		});
 
 		this.inform();
@@ -78,7 +78,9 @@ var app = app || {};
 
 	app.TodoModel.prototype.clearCompleted = function () {
 		// Write this function
+		this.todos = this.todos.filter(function (todo) {
+			return todo.completed !== true;
+		});
 		this.inform();
 	};
-
 })();

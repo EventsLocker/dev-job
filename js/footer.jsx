@@ -6,7 +6,7 @@
 var app = app || {};
 
 (function () {
-	'use strict';
+	"use strict";
 
 	app.TodoFooter = React.createClass({
 		render: function () {
@@ -14,9 +14,7 @@ var app = app || {};
 
 			if (this.props.completedCount > 0) {
 				clearButton = (
-					<button
-						className="clear-completed"
-						onClick={this.props.onClearCompleted}>
+					<button className="clear-completed" onClick={this.props.onClearCompleted}>
 						Clear completed
 					</button>
 				);
@@ -26,36 +24,29 @@ var app = app || {};
 			return (
 				<footer className="footer">
 					<span className="todo-count">
-						<strong>{this.props.count}</strong> items left
+						<strong>{this.props.count > 0 ? this.props.count : "No"}</strong> item{this.props.count !== 1 ? "s" : null}{" "}
+						left
 					</span>
 					<ul className="filters">
 						<li>
-							<a
-								href="#/"
-								className={classNames({selected: nowShowing === app.ALL_TODOS})}>
-									All
+							<a href="#/" className={classNames({ selected: nowShowing === app.ALL_TODOS })}>
+								All
 							</a>
-						</li>
-						{' '}
+						</li>{" "}
 						<li>
-							<a
-								href="#/active"
-								className={classNames({selected: nowShowing === app.ACTIVE_TODOS})}>
-									Active
+							<a href="#/active" className={classNames({ selected: nowShowing === app.ACTIVE_TODOS })}>
+								Active
 							</a>
-						</li>
-						{' '}
+						</li>{" "}
 						<li>
-							<a
-								href="#/completed"
-								className={classNames({selected: nowShowing === app.COMPLETED_TODOS})}>
-									Completed
+							<a href="#/completed" className={classNames({ selected: nowShowing === app.COMPLETED_TODOS })}>
+								Completed
 							</a>
 						</li>
 					</ul>
 					{clearButton}
 				</footer>
 			);
-		}
+		},
 	});
 })();

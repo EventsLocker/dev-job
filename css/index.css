@@ -1,0 +1,31 @@
+.destroy {
+	border: 1px solid gray !important;
+	background-color: gray;
+	padding: 0 !important;
+	height: 30px !important;
+	width: 30px !important;
+	border-radius: 50%;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	color: white !important;
+}
+.mainWrapper {
+	background-color: #fef3c7;
+}
+.footer:before {
+	box-shadow: 0 1px 1px rgb(0 0 0 / 20%), 0 8px 0 -3px #fef3c7, 0 9px 1px -3px rgb(0 0 0 / 20%), 0 16px 0 -6px #fef3c7,
+		0 17px 2px -6px rgb(0 0 0 / 20%) !important;
+}
+.new-todo::placeholder {
+	color: #009dd6 !important;
+	opacity: 1 !important; /* Firefox */
+}
+.new-todo:-ms-input-placeholder {
+	/* IE */
+	color: #009dd6 !important;
+}
+
+.new-todo::-ms-input-placeholder {
+	/* Edge */
+	color: #009dd6 !important;
+}

@@ -6,11 +6,11 @@
 var app = app || {};
 
 (function () {
-	'use strict';
+	"use strict";
 
-	app.ALL_TODOS = 'all';
-	app.ACTIVE_TODOS = 'active';
-	app.COMPLETED_TODOS = 'completed';
+	app.ALL_TODOS = "all";
+	app.ACTIVE_TODOS = "active";
+	app.COMPLETED_TODOS = "completed";
 	var TodoFooter = app.TodoFooter;
 	var TodoItem = app.TodoItem;
 
@@ -21,22 +21,22 @@ var app = app || {};
 			return {
 				nowShowing: app.ALL_TODOS,
 				editing: null,
-				newTodo: ''
+				newTodo: "",
 			};
 		},
 
 		componentDidMount: function () {
 			var setState = this.setState;
 			var router = Router({
-				'/': setState.bind(this, {nowShowing: app.ALL_TODOS}),
-				'/active': setState.bind(this, {nowShowing: app.ACTIVE_TODOS}),
-				'/completed': setState.bind(this, {nowShowing: app.COMPLETED_TODOS})
+				"/": setState.bind(this, { nowShowing: app.ALL_TODOS }),
+				"/active": setState.bind(this, { nowShowing: app.ACTIVE_TODOS }),
+				"/completed": setState.bind(this, { nowShowing: app.COMPLETED_TODOS }),
 			});
-			router.init('/');
+			router.init("/");
 		},
 
 		handleChange: function (event) {
-			this.setState({newTodo: event.target.value});
+			this.setState({ newTodo: event.target.value });
 		},
 
 		handleNewTodoKeyDown: function (event) {
@@ -50,7 +50,7 @@ var app = app || {};
 
 			if (val) {
 				this.props.model.addTodo(val);
-				this.setState({newTodo: ''});
+				this.setState({ newTodo: "" });
 			}
 		},
 
@@ -68,16 +68,17 @@ var app = app || {};
 		},
 
 		edit: function (todo) {
-			this.setState({editing: todo.id});
+			console.log("here");
+			this.setState({ editing: todo.id });
 		},
 
 		save: function (todoToSave, text) {
 			this.props.model.save(todoToSave, text);
-			this.setState({editing: null});
+			this.setState({ editing: null });
 		},
 
 		cancel: function () {
-			this.setState({editing: null});
+			this.setState({ editing: null });
 		},
 
 		clearCompleted: function () {
@@ -90,22 +91,62 @@ var app = app || {};
 			var todos = this.props.model.todos;
 
 			var shownTodos = todos.filter(function (todo) {
-				return todo
+				return todo;
 			}, this);
 
 			var todoItems = shownTodos.map(function (todo) {
-				return (
-					<TodoItem
-						key={todo.id}
-						todo={todo}
-						onToggle={this.toggle.bind(this, todo)}
-						onDestroy={this.destroy.bind(this, todo)}
-						onEdit={this.edit.bind(this, todo)}
-						editing={this.state.editing === todo.id}
-						onSave={this.save.bind(this, todo)}
-						onCancel={this.cancel}
-					/>
-				);
+				switch (this.state.nowShowing) {
+					case app.ALL_TODOS:
+						return (
+							<TodoItem
+								key={todo.id}
+								todo={todo}
+								onToggle={this.toggle.bind(this, todo)}
+								onDestroy={this.destroy.bind(this, todo)}
+								onEdit={this.edit.bind(this, todo)}
+								editing={this.state.editing === todo.id}
+								onSave={this.save.bind(this, todo)}
+								onCancel={this.cancel}
+							/>
+						);
+					case app.ACTIVE_TODOS:
+						if (!todo.completed) {
+							return (
+								<TodoItem
+									key={todo.id}
+									todo={todo}
+									onToggle={this.toggle.bind(this, todo)}
+									onDestroy={this.destroy.bind(this, todo)}
+									onEdit={this.edit.bind(this, todo)}
+									editing={this.state.editing === todo.id}
+									onSave={this.save.bind(this, todo)}
+									onCancel={this.cancel}
+								/>
+							);
+						} else {
+							return null;
+						}
+
+					case app.COMPLETED_TODOS:
+						if (todo.completed) {
+							return (
+								<TodoItem
+									key={todo.id}
+									todo={todo}
+									onToggle={this.toggle.bind(this, todo)}
+									onDestroy={this.destroy.bind(this, todo)}
+									onEdit={this.edit.bind(this, todo)}
+									editing={this.state.editing === todo.id}
+									onSave={this.save.bind(this, todo)}
+									onCancel={this.cancel}
+								/>
+							);
+						} else {
+							return null;
+						}
+					default:
+						return null;
+				}
 			}, this);
 
 			var activeTodoCount = todos.reduce(function (accum, todo) {
@@ -114,13 +155,14 @@ var app = app || {};
 
 			var completedCount = todos.length - activeTodoCount;
 
-			footer =
+			footer = (
 				<TodoFooter
 					count={activeTodoCount}
 					completedCount={completedCount}
 					nowShowing={this.state.nowShowing}
 					onClearCompleted={this.clearCompleted}
-				/>;
+				/>
+			);
 
 			if (todos.length) {
 				main = (
@@ -132,18 +174,14 @@ var app = app || {};
 							onChange={this.toggleAll}
 							checked={activeTodoCount === 0}
 						/>
-						<label
-							htmlFor="toggle-all"
-						/>
-						<ul className="todo-list">
-							{todoItems}
-						</ul>
+						<label htmlFor="toggle-all" />
+						<ul className="todo-list">{todoItems}</ul>
 					</section>
 				);
 			}
 
 			return (
-				<div>
+				<div className="mainWrapper">
 					<header className="header">
 						<h1>todos</h1>
 						<input
@@ -156,19 +194,16 @@ var app = app || {};
 						/>
 					</header>
 					{main}
-					{footer}
+					{todoItems && todoItems.length ? footer : null}
 				</div>
 			);
-		}
+		},
 	});
 
-	var model = new app.TodoModel('react-todos');
+	var model = new app.TodoModel("react-todos");
 
 	function render() {
-		React.render(
-			<TodoApp model={model}/>,
-			document.getElementsByClassName('todoapp')[0]
-		);
+		React.render(<TodoApp model={model} />, document.getElementsByClassName("todoapp")[0]);
 	}
 
 	model.subscribe(render);
